@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,18 +6,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace CustomAuthenticationSample
 {
-    public static class AuthenticationExtension
-    {
-        public static void AddApiKeySupport(this AuthenticationBuilder authenticationBuilder)
-        {
-            authenticationBuilder
-                .AddScheme<MyApiKeyAuthOption, MyApiKeyAuthHandler>(MyApiKeyAuthOption.Scheme,
-                                                                    option =>
-                                                                    {
-                                                                    });
-        }
-    }
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
