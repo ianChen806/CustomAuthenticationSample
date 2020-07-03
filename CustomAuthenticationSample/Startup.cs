@@ -7,6 +7,18 @@ using Microsoft.Extensions.Hosting;
 
 namespace CustomAuthenticationSample
 {
+    public static class AuthenticationExtension
+    {
+        public static void AddApiKeySupport(this AuthenticationBuilder authenticationBuilder)
+        {
+            authenticationBuilder
+                .AddScheme<MyApiKeyAuthOption, MyApiKeyAuthHandler>(MyApiKeyAuthOption.Scheme,
+                                                                    option =>
+                                                                    {
+                                                                    });
+        }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -15,24 +27,6 @@ namespace CustomAuthenticationSample
         }
 
         public IConfiguration Configuration { get; }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            
-            var authenticationBuilder = services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = MyApiKeyAuthOption.Scheme;
-                options.DefaultAuthenticateScheme = MyApiKeyAuthOption.Scheme;
-            });
-            authenticationBuilder.AddScheme<MyApiKeyAuthOption, MyApiKeyAuthHandler>(MyApiKeyAuthOption.Scheme, option =>
-            {
-            });
-
-            services.AddHttpContextAccessor();
-            
-            services.AddScoped<ApiKeyQuery>();
-        }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -52,6 +46,21 @@ namespace CustomAuthenticationSample
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = MyApiKeyAuthOption.Scheme;
+                options.DefaultAuthenticateScheme = MyApiKeyAuthOption.Scheme;
+            }).AddApiKeySupport();
+
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<ApiKeyQuery>();
         }
     }
 }
