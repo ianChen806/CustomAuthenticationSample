@@ -4,5 +4,6 @@ namespace CustomAuthenticationSample
 {
     public class MyApiKeyAuthOption : AuthenticationSchemeOptions
     {
+        public const string Scheme = "ApiKey";
     }
 }

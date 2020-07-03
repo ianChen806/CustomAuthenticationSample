@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CustomAuthenticationSample.Controllers
 {
@@ -10,6 +11,13 @@ namespace CustomAuthenticationSample.Controllers
         public string Get()
         {
             return "ok";
+        }
+
+        [HttpGet]
+        [Authorize]
+        public string GetAuth()
+        {
+            return "ok auth";
         }
     }
 }

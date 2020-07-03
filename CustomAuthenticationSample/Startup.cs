@@ -19,10 +19,17 @@ namespace CustomAuthenticationSample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            var authenticationBuilder = services.AddAuthentication();
-            authenticationBuilder.AddScheme<MyApiKeyAuthOption, MyApiKeyAuthHandler>("ApiKey", option =>
+            
+            var authenticationBuilder = services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = MyApiKeyAuthOption.Scheme;
+                options.DefaultAuthenticateScheme = MyApiKeyAuthOption.Scheme;
+            });
+            authenticationBuilder.AddScheme<MyApiKeyAuthOption, MyApiKeyAuthHandler>(MyApiKeyAuthOption.Scheme, option =>
             {
             });
+            
+            services.AddScoped<ApiKeyQuery>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -36,6 +43,7 @@ namespace CustomAuthenticationSample
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
