@@ -28,6 +28,8 @@ namespace CustomAuthenticationSample
             authenticationBuilder.AddScheme<MyApiKeyAuthOption, MyApiKeyAuthHandler>(MyApiKeyAuthOption.Scheme, option =>
             {
             });
+
+            services.AddHttpContextAccessor();
             
             services.AddScoped<ApiKeyQuery>();
         }
